@@ -1,19 +1,46 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Button, Text, View } from 'react-native';
+import { useFonts } from '@use-expo/font';
 
-export default function App() {
+import Router from './src/Router';
+import {AppLoading} from 'expo'
+
+export default (props: any) => {
+  const [user, setUser] = useState(null)
+  let [fontsLoaded] = useFonts({
+    'Roboto_medium': require('./assets/fonts/IBM-Plex-Sans/IBMPlexSans-Regular.ttf'),
+  });
+
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaded(true)
+    }, 500)
+  }, [fontsLoaded])
+
+  async function loadAssetsAsync() {
+    try {
+      
+    } catch (error) {
+      // return true
+      Promise.resolve(true)
+      setLoaded(true)
+    } finally {
+      console.log('Finaly promise ')
+    }
+  }
+  function onFinish() {
+    console.log('finished loading.')
+    
+  }
+  console.log({
+    loaded,
+    fontsLoaded
+  })
+  if(!loaded) {
+    <AppLoading startAsync={loadAssetsAsync} onFinish={onFinish} onError={console.log} />
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
+    <Router user={user} loaded={loaded} />
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
